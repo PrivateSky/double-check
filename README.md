@@ -7,10 +7,10 @@ SemanticFirewall is a node.js moodule that can be extended to create your own "s
 var sf = require("semantic-firewall");
 
 ##add verb 
-  sf.addCheck("notNull", function(item){
-    if(item == null || item == ""){
-      throw new Error("Null reference found");
-  })
+    sf.addCheck("notNull", function(item){
+      if(item == null || item == ""){
+        throw new Error("Null reference found");
+    })
 
   Check:
   sf.notNull("test");
@@ -23,40 +23,40 @@ Check:
 
 
 ##declare infomation about ontologic tags 
-sf.tag(tagname, {
-    identity:boolean,
-    private:boolean,
-    sensitivity:0-10,
-    related:"list of tags"
-    })
+    sf.tag(tagname, {
+        identity:boolean,
+        private:boolean,
+        sensitivity:0-10,
+        related:"list of tags"
+        })
 
 Example:
 
-  sf.tag("Social Security Number", {
-      identity:true,
-      private:true,
-      sensitivity:5
-      })
-    
-  sf.tag("Birth Date", {
-      identity:false,
-      private:true,
-      sensitivity:3
-      })
-      
+      sf.tag("Social Security Number", {
+          identity:true,
+          private:true,
+          sensitivity:5
+          })
+        
+      sf.tag("Birth Date", {
+          identity:false,
+          private:true,
+          sensitivity:3
+          })
+          
 ##declare annotation for privacy ontologic tag 
 
 sf.tag(objectType, field, tagName)
 
  Example:
  
-    sf.tag("User", "SSN",   "Social Security Number");
-    sf.tag("User", "birthDate", "Birth Date");
+      sf.tag("User", "SSN",   "Social Security Number");
+      sf.tag("User", "birthDate", "Birth Date");
   
 ###declare rules about use of combinations between identity, private fields and access zones. It is possbile to declare access zones and parent relations between resources and zones  
-  sf.grant(zone, resourseType)
-  sf.parentZone(zone, parentZone)
-  sf.parentResourceType(resourseType, ParentresourseType)
+      sf.grant(zone, resourseType)
+      sf.parentZone(zone, parentZone)
+      sf.parentResourceType(resourseType, ParentresourseType)
 
 Resource can be: tags, fields, objects, combination of objects with common identity fields
 Zones: can be userids, groups, roles,servers, nodenames, etc. 
@@ -64,10 +64,10 @@ Zones: can be userids, groups, roles,servers, nodenames, etc.
 
 
 ##check usage
-  sf.allow(zone, resource, resurceType): boolean
+      sf.allow(zone, resource, resurceType): boolean
 
 ##get report with all usages of private data in zones that don't have declared access in rules
-  sf.getReport()
+    sf.getReport()
   
   
   
