@@ -11,10 +11,10 @@ This module is experimental and it is itented mainly to be used inside projects 
 
 ## What is semantic-firewall module?
 SemanticFirewall is a node.js moodule that can be extended to create your own "specific language/API" for  
-    - asserts and runtime validations (throw exceptions)     
-    - extensible logging infrastructures
-    - extensible exception handling mechanisms connected with your logging and asserts infrastructure
-    - extensible semantic firewall for executable choreographies (runtime security and privacy checks). 
+* asserts and runtime validations (throw exceptions)     
+* extensible logging infrastructures
+* extensible exception handling mechanisms connected with your logging and asserts infrastructure
+* extensible semantic firewall for executable choreographies (runtime security and privacy checks). 
         
         
 ##Logging approach
@@ -47,24 +47,24 @@ Therefore, all the extensions you can declare should also declare a semantic cat
 
 ##APIs:
 
-            var assert      = require("semantic-firewall").assert;      //get the assert singleton
-            var throwing    = require("semantic-firewall").exceptions;  //get the exceptions singleton
-            var firewall    = require("semantic-firewall").firewall;    //get the firewall singleton
-            var logger      = require("semantic-firewall").logger;      //get the logger singleton
-            
-            /* proposed, not implemented in the current version */
-            //creates a dependency injection container in the name space given as parameter
-            var container    = require("semantic-firewall").dicontainer('name'); 
+        var assert      = require("semantic-firewall").assert;      //get the assert singleton
+        var throwing    = require("semantic-firewall").exceptions;  //get the exceptions singleton
+        var firewall    = require("semantic-firewall").firewall;    //get the firewall singleton
+        var logger      = require("semantic-firewall").logger;      //get the logger singleton
+        
+        /* proposed, not implemented in the current version */
+        //creates a dependency injection container in the name space given as parameter
+        var container    = require("semantic-firewall").dicontainer('name'); 
 
 
 ###Add new type of assert checks: addCheck 
-            assert.addCheck("notNull", function(item){
-              if(item == null || item == ""){
-                throw new Error("Null reference found");
-            })
 
-  Check:
-  assert.notNull("test");
+        assert.addCheck("notNull", function(item){
+          if(item == null || item == ""){
+            throw new Error("Null reference found");
+        })
+
+  Check:  assert.notNull("test");
 
 
 ## Mechanism to control exception types, log important ones
@@ -74,8 +74,7 @@ Therefore, all the extensions you can declare should also declare a semantic cat
                 throw new Error("explanation"); //it is mandatory to throw an expcetion, in order to preserve the semantic of throw keyword 
             })
 
-  Usage:
-  throwing.randomFail("Why not!?");
+  Usage:  throwing.randomFail("Why not!?");
   
 
 ##Logger
