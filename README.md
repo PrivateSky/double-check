@@ -1,4 +1,4 @@
-## Philosophy         
+## Why?         
      
 In complex projects you have to invest in logging infrastructure and uniform error handling mechanisms.  
 For best results, exceptions, logging and invariant checks with assert functions should work toghether as smoothly as possible. 
@@ -9,7 +9,7 @@ In this module we also provide a semantic firewall innovation that will be using
 This module is experimental and it is itented mainly to be used inside projects derived from SwarmESB project (but does not have other dependencies).
 
 
-## semantic-firewall module
+## What is semantic-firewall module?
 SemanticFirewall is a node.js moodule that can be extended to create your own "specific language/API" for  
     - asserts and runtime validations (throw exceptions)     
     - extensible logging infrastructures
@@ -53,7 +53,8 @@ Therefore, all the extensions you can declare should also declare a semantic cat
             var logger      = require("semantic-firewall").logger;      //get the logger singleton
             
             /* proposed, not implemented in the current version */
-            var container    = require("semantic-firewall").dicontainer('name'); //creates a dependency injection container in the name space given as parameter 
+            //creates a dependency injection container in the name space given as parameter
+            var container    = require("semantic-firewall").dicontainer('name'); 
 
 
 ###Add new type of assert checks: addCheck 
@@ -82,17 +83,21 @@ Therefore, all the extensions you can declare should also declare a semantic cat
     logger.rawLogging = function(type, level, rawObject, timeStamp, stack){...} 
     
     Observations: 
-    - if stack is undefined it should be created from current stack. Give false or other value and the stack will not be saved.
+    - if stack is undefined it should be created from current stack. 
+    Give false or other value and the stack will not be saved.
     - if timeStamp is undefined it should be taken from current time, unix time
 
 ###Add new type of logging function: addCase
     
     logger.addCase("type", level,  loggingFunction, argument types, checkFunctions) 
+    
+Observations:
     additionaly to make the logging API mor apropiate for each case,  the loggingFunction has a chance to add other contextual information before calling logger.rawLogging
     checkFunctions  has a chance to trigger actions caused by current log entry or for thresholds violations from previous entries 
 
-  Example:
-          logger.addCase("warning", function(explanation){
+Example:
+
+        logger.addCase("warning", function(explanation){
                     this.rawLogging(...)        
               }, [
                     {
@@ -104,9 +109,8 @@ Therefore, all the extensions you can declare should also declare a semantic cat
                     }
                 ], 
                 undefined      //we can let it undefined
-              })
-              
-          logger.warning("RandomFail happens in this file",__filename);
+              })          
+        logger.warning("RandomFail happens in this file",__filename);
 
 
 
@@ -124,7 +128,8 @@ Therefore, all the extensions you can declare should also declare a semantic cat
 
 ##Ontological semantic firewall (not really fully implemented yet, wip)
 
-        ###declare infomation about ontologic tags 
+###declare infomation about ontologic tags 
+
             firewall.tag(tagname, {
                 identity:boolean,
                 private:boolean,
@@ -132,7 +137,7 @@ Therefore, all the extensions you can declare should also declare a semantic cat
                 related:"list of tags"
                 })
 
-Example:
+    Example:
 
           firewall.tag("Social Security Number", {
               identity:true,
@@ -148,7 +153,7 @@ Example:
               
 ###Declare annotation for privacy ontologic tag 
 
-firewall.tag(objectType, field, tagName)
+    firewall.tag(objectType, field, tagName)
 
  Example:
  
