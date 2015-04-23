@@ -1,0 +1,49 @@
+{
+  "name": "semantic-firewall",
+  "description": "SemanticFirewall is a node.js moodule that can be extended to create your own specific language to represent asserts, validations, runtime privacy checks",
+  "version": "0.0.2",
+  "homepage": "https://github.com/salboaie/semantic-firewall",
+  "author": {
+    "name": "Alboaie Sinica",
+    "email": "salboaie@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Alboaie Sinica",
+      "email": "salboaie@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/salboaie/asynchron.git"
+  },
+  "bugs": {
+    "email": "salboaie@gmail.com",
+    "url": "https://github.com/salboaie/asynchron/issues"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "main": "./lib/sf.js",
+  "licenses": [
+    {
+      "type": "LGPL",
+      "url": "http://www.gnu.org/licenses/lgpl.html"
+    }
+  ],
+  "_id": "semantic-firewall@0.0.2",
+  "dependencies" : {
+    "q": "=1.2.0"
+  },
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": "1.1.12",
+  "_nodeVersion": "v0.10.0",
+  "_defaultsLoaded": true,
+  "dist": {
+    
+  }
+}
