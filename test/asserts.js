@@ -35,3 +35,40 @@ assert.pass("Test equal", function(){
     assert.equal(a, "abcd");
 })
 
+
+function asyncFunc(callback){
+    setTimeout(callback, 100);
+}
+
+
+assert.callback("Expect callback call", function(callback){
+    asyncFunc(function(){
+        callback();
+    })
+})
+
+
+assert.steps("Expect 3 steps test",
+        [
+            function(nextStep) {
+                asyncFunc(function () {
+                    nextStep();
+                })
+            },
+            asyncFunc,
+            asyncFunc
+        ]);
+
+function fail(){
+    assert.emptyString("a non empty string", "Non empty string given to get a failed result");
+}
+
+
+assert.steps("Expect failed test on step 2",
+    [
+        asyncFunc,
+        fail,
+        asyncFunc
+    ]);
+
+

@@ -1,16 +1,15 @@
 ## Why?         
      
-In complex projects you have to invest in logging infrastructure and uniform error handling mechanisms.  
-For best results, exceptions, logging and invariant checks with assert functions should work toghether as smoothly as possible. 
-With this module we offer a foundation to grow and control all these aspects. 
-For example, if you have to add anytime (later) code to perform some specific actions when some types of exceptions happens. 
-If you don't control how exceptions, asserts and logging code is writeln from the beginning, it can be ugly to modify code in hundreds of places.       
-In this module we also provide a semantic firewall innovation that will be using the logger but add a new dimension to assert checks.             
-This module is experimental and it is itented mainly to be used inside projects derived from SwarmESB project (but does not have other dependencies).
-
+In complex projects you have to invest in logging infrastructure, uniform error handling mechanisms, automated tests, continuous integration,etc.  
+For best results, exceptions, logging and invariant checks like  asserts should work together as smoothly as possible. 
+This module is experimental and it is indented to be used inside projects derived from SwarmESB project (but does not have other dependencies). 
+Given the distributed nature of SwarmESB projects we decided to build inside semantic-firewall module a base to put together logs, exceptions, asserts and other type of semantic checks.
+This module is a foundation to grow and control yourself all these aspects. SwarmCore contains practical examples of how a real project should use this module.
+Also check our tests to get some usage examples. 
+ 
 
 ## What is semantic-firewall module?
-SemanticFirewall is a node.js moodule that can be extended to create your own "specific language/API" for  
+SemanticFirewall is a node.js module that can be extended to create your own "specific language/API" for  
 * asserts and runtime validations (throw exceptions)     
 * extensible logging infrastructures
 * extensible exception handling mechanisms connected with your logging and asserts infrastructure
@@ -28,18 +27,18 @@ To be fully useful, a logger will perform many roles:
     
 Therefore, all the extensions you can declare should also declare a semantic category for each parameter, declared as an array of objects in logger.addCase calls.
    We identified the following semantic categories having booleans as values:
-   - 'category': the field is usable to create indexes for logs. The mandatory field "type" is such ca category but you can add other. One can see ca category    
-   - 'level' : identify the level of attention that a log entry should get from operations point of view 
-   - 'time': a value that uniquely identifies in time the log. This parameter is mandatory and normally automatically instantiated by core logging functions
+   - 'category    ': the field is usable to create indexes for logs. The mandatory field "type" is such ca category but you can add other. One can see ca category    
+   - 'level'       : identify the level of attention that a log entry should get from operations point of view 
+   - 'time'        : a value that uniquely identifies in time the log. This parameter is mandatory and normally automatically instantiated by core logging functions
    - 'description' : part of the description, environment values relevant for values. All parameters have this aspect so you don't declare
-   - 'stack' : describe an execution stack that caused the log entry   
-   - 'filename' : path of a file causing or related to the log entry
-   - 'key part': a set of fields that together create a key (category)  
-   - 'swarm'   : the current swarm name (SwarmESB specific)
-   - 'phase'   : the current phase name (SwarmESB specific)
+   - 'stack'       : describe an execution stack that caused the log entry   
+   - 'filename'    : path of a file causing or related to the log entry
+   - 'key part'    : a set of fields that together create a key (category)  
+   - 'swarm'       : the current swarm name (SwarmESB specific)
+   - 'phase'       : the current phase name (SwarmESB specific)
    - 'mainGroup'   : the type of the addapter  (SwarmESB specific)
    - 'adapter'     : the uid of the current adapter instance ((SwarmESb specific))
-   - 'swarm process': the uid of a swarm process
+   - 'process'     : the uid of a swarm process (or a process) that automatically stick multiple logs entries together
    
    Additionally,each parameter declaration should have a name, identified with field named 'name' in parameter descriptions 
    
@@ -176,5 +175,9 @@ Zones: can be userids, groups, roles,servers, nodenames, etc.
           firewall.getReport()
   
   
-  
+##Conclusions  
+If you don't control how exceptions, asserts and logging code is writeln from the beginning, later can get ugly to modify code in hundreds of places.
+Ee encourage use of asserts even in production code (to check important invariants) but they should be properly integrated with logging and exceptions. 
+Early crushes represent a better option than loosing money because security issues or other ugly bugs.         
+In this module we also provide a semantic firewall innovation that will be using the logger but add a new dimension to assert checks.             
 
