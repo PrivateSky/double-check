@@ -28,7 +28,18 @@ To be fully useful, a logger will perform many roles:
 Therefore, all the extensions you can declare should also declare a semantic category for each parameter, declared as an array of objects in logger.addCase calls.
    We identified the following semantic categories having booleans as values:
    - 'category    ': the field is usable to create indexes for logs. The mandatory field "type" is such ca category but you can add other. One can see ca category    
-   - 'level'       : identify the level of attention that a log entry should get from operations point of view 
+   - 'level'       : number friom 1-9, identify the level of attention that a log entry should get from operations point of view
+                     0 system level critical error: hardError
+                     1 potentially causing user's data loosing error: error
+                     2 minor annoyance, recoverable error:   logError  
+                     3 user experience causing issues error:  uxError 
+                     4 warning,possible isues but somehow unclear behaviour: warn  
+                     5 store general info about the system working: info
+                     6 system level debug: debug  
+                     7 local node/service debug: ldebug
+                     8 user level debug; udebug
+                     9 development time debug: ddebug
+                     
    - 'time'        : a value that uniquely identifies in time the log. This parameter is mandatory and normally automatically instantiated by core logging functions
    - 'description' : part of the description, environment values relevant for values. All parameters have this aspect so you don't declare
    - 'stack'       : describe an execution stack that caused the log entry   
@@ -39,7 +50,8 @@ Therefore, all the extensions you can declare should also declare a semantic cat
    - 'mainGroup'   : the type of the addapter  (SwarmESB specific)
    - 'adapter'     : the uid of the current adapter instance ((SwarmESb specific))
    - 'process'     : the uid of a swarm process (or a process) that automatically stick multiple logs entries together
-   
+   - 'var args'    : potential variable number of args     
+    
    Additionally,each parameter declaration should have a name, identified with field named 'name' in parameter descriptions 
    
    
