@@ -64,8 +64,9 @@ Therefore, all the extensions you can declare should also declare a semantic cat
         var logger      = require("semantic-firewall").logger;      //get the logger singleton
         
         /* proposed, not implemented in the current version */
+        
         //creates a dependency injection container in the name space given as parameter
-        var container    = require("semantic-firewall").dicontainer('name'); 
+        var container    = require("semantic-firewall").container; 
 
 
 ###Add new type of assert checks: addCheck 
