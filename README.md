@@ -1,19 +1,19 @@
 ## Why?         
      
-In complex projects you have to invest in logging infrastructure, uniform error handling mechanisms, automated tests, continuous integration,etc.  
+In complex projects the logging infrastructure, uniform error handling mechanisms, automated tests, continuous integration,etc ar every important.  
 For best results, exceptions, logging and invariant checks like  asserts should work together as smoothly as possible. 
 This module is experimental and it is indented to be used inside projects derived from SwarmESB project (but does not have other dependencies). 
-Given the distributed nature of SwarmESB projects we decided to build inside semantic-firewall module a base to put together logs, exceptions, asserts and other type of semantic checks.
+Given the distributed nature of SwarmESB projects we decided to build inside double-check module a base to put together logs, exceptions, asserts, checks and other type of semantic checks.
 This module is a foundation to grow and control yourself all these aspects. SwarmCore contains practical examples of how a real project should use this module.
 Also check our tests to get some usage examples. 
  
 
 ## What is semantic-firewall module?
-SemanticFirewall is a node.js module that can be extended to create your own "specific language/API" for  
-* asserts and runtime validations (throw exceptions)     
+SemanticFirewall is a node.js module that can be extended to create your own "specific language/API" for       
 * extensible logging infrastructures
 * extensible exception handling mechanisms connected with your logging and asserts infrastructure
-* extensible semantic firewall for executable choreographies (runtime security and privacy checks). 
+* runtime validations called checks that can be added during developement and disabled in production 
+ 
         
         
 ##Logging approach
@@ -59,14 +59,14 @@ Therefore, all the extensions you can declare should also declare a semantic cat
 ##APIs:
 
         var assert      = require("semantic-firewall").assert;      //get the assert singleton
+        var check      = require("semantic-firewall").check;      //get the assert singleton
         var throwing    = require("semantic-firewall").exceptions;  //get the exceptions singleton
         var firewall    = require("semantic-firewall").firewall;    //get the firewall singleton
         var logger      = require("semantic-firewall").logger;      //get the logger singleton
         
         /* proposed, not implemented in the current version */
         
-        //creates a dependency injection container in the name space given as parameter
-        var container    = require("semantic-firewall").container; 
+ 
 
 
 ###Add new type of assert checks: addCheck 
@@ -136,61 +136,13 @@ Example:
           Usages:
           assert.isDocumentId("myDocumentId");
           exceptions.randomBreak();
-
-##Ontological semantic firewall (not really fully implemented yet, wip)
-
-###declare infomation about ontologic tags 
-
-            firewall.tag(tagname, {
-                identity:boolean,
-                private:boolean,
-                sensitivity:0-10,
-                related:"list of tags"
-                })
-
-    Example:
-
-          firewall.tag("Social Security Number", {
-              identity:true,
-              private:true,
-              sensitivity:5
-              })
-            
-          firewall.tag("Birth Date", {
-              identity:false,
-              private:true,
-              sensitivity:3
-              })
-              
-###Declare annotation for privacy ontologic tag 
-
-    firewall.tag(objectType, field, tagName)
-
- Example:
- 
-          firewall.tag("User", "SSN",   "Social Security Number");
-          firewall.tag("User", "birthDate", "Birth Date");
-  
-###Declare rules about use of combinations between identity, private fields and access zones. It is possbile to declare access zones and parent relations between resources and zones  
-          firewall.grant(zone, resourseType)
-          firewall.parentZone(zone, parentZone)
-          firewall.parentResourceType(resourseType, ParentresourseType)
-
-Resource can be: tags, fields, objects, combination of objects with common identity fields
-Zones: can be userids, groups, roles,servers, nodenames, etc. 
-  For swarms  the zones can be  phases, group of adapters in swarms, tenants, users. roles, etc 
-
-
-###Check usage
-        firewall.allow(zone, resource, resurceType): boolean
-
-##Get a report with all usages of private data in zones that don't have declared access in rules
-          firewall.getReport()
   
   
 ##Conclusions  
-If you don't control how exceptions, asserts and logging code is writeln from the beginning, later can get ugly to modify code in hundreds of places.
-Ee encourage use of asserts even in production code (to check important invariants) but they should be properly integrated with logging and exceptions. 
-Early crushes represent a better option than loosing money because security issues or other ugly bugs.         
-In this module we also provide a semantic firewall innovation that will be using the logger but add a new dimension to assert checks.             
+ - Start with proper logging policies from begining: If you don't control how exceptions, asserts and logging code is writeln from the beginning, it can get ugly to modify your code in hundreds of places.
+ - Use checks in production code: We encourage use of asserts (called checks) even in production code (to check important invariants) but they should be properly integrated with logging and exceptions. 
+ - Early crushes in a controled environment represent a better option than loosing money because security issues or other ugly bugs.
+ 
+          
+             
 
