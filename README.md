@@ -8,8 +8,8 @@ This module is a foundation to grow and control yourself all these aspects. Swar
 Also check our tests to get some usage examples. 
  
 
-## What is semantic-firewall module?
-SemanticFirewall is a node.js module that can be extended to create your own "specific language/API" for       
+## What is double-check module?
+DoubleCheck is a node.js module that can be extended to create your own "specific language/API" for
 * extensible logging infrastructures
 * extensible exception handling mechanisms connected with your logging and asserts infrastructure
 * runtime validations called checks that can be added during developement and disabled in production 
@@ -58,11 +58,11 @@ Therefore, all the extensions you can declare should also declare a semantic cat
 
 ##APIs:
 
-        var assert      = require("semantic-firewall").assert;      //get the assert singleton
-        var check      = require("semantic-firewall").check;      //get the assert singleton
-        var throwing    = require("semantic-firewall").exceptions;  //get the exceptions singleton
-        var firewall    = require("semantic-firewall").firewall;    //get the firewall singleton
-        var logger      = require("semantic-firewall").logger;      //get the logger singleton
+        var assert      = require("double-check").assert;      //get the assert singleton
+        var check      = require("double-check").check;      //get the assert singleton
+        var throwing    = require("double-check").exceptions;  //get the exceptions singleton
+        var firewall    = require("double-check").firewall;    //get the firewall singleton
+        var logger      = require("double-check").logger;      //get the logger singleton
         
         /* proposed, not implemented in the current version */
         

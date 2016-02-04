@@ -2,7 +2,7 @@
  * Created by salboaie on 4/23/15.
  */
 
-var logger       = require('semantic-firewall').logger;
+var logger       = require('double-check').logger;
 var assert       = require('semantic-firewall').assert;
 
 var buffer = [];

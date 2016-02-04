@@ -2,8 +2,8 @@
  * Created by salboaie on 4/23/15.
  */
 
-var assert       = require('semantic-firewall').assert;
-var exceptions   = require('semantic-firewall').exceptions;
+var assert       = require('double-check').assert;
+var exceptions   = require('double-check').exceptions;
 
 exceptions.register("emptyString", function(explanation){
     if(explanation){
