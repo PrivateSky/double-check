@@ -3,7 +3,7 @@
  */
 
 var logger       = require('double-check').logger;
-var assert       = require('semantic-firewall').assert;
+var assert       = require('double-check').assert;
 
 var buffer = [];
 
