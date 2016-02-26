@@ -1,8 +1,8 @@
 {
   "name": "double-check",
   "description": "double-check is a node.js module provide support for asserts, validations, runtime privacy checks",
-  "version": "0.1.3",
-  "_id": "double-check@0.1.3",
+  "version": "0.1.4",
+  "_id": "double-check@0.1.4",
   "homepage": "https://github.com/salboaie/double-check",
   "author": {
     "name": "Alboaie Sinica",
