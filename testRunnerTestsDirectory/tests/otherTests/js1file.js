@@ -3,6 +3,6 @@
  */
 var assert = require('double-check').assert;
 assert.callback("Test Js1 file",function(end){
-    assert.fail("Could not pass",function(){});
+    assert.fail("Should pass when fails...",function(){throw new Error()});
     end();
 });
