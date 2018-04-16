@@ -15,7 +15,7 @@ DoubleCheck is a node.js module that can be extended to create your own "specifi
 * runtime validations called checks that can be added during developement and disabled in production 
  
         
-        
+        `
 ##Logging approach
 
 We this module we try to make logging booth simple to use by programmer during development but also useful at runtime for operations.

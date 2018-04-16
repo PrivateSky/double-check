@@ -1,0 +1,1 @@
+The reports dir must exist in order to be able to create reports using the test runner.
