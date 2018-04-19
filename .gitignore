@@ -1,5 +1,1 @@
-
-/tests/runnerTests/inheritConfigurationsTest/reports/*.txt
-/tests/runnerTests/discoverFilesHierarchyTest/reports/*.txt
-/tests/runnerTests/cwdTest/reports/*.txt
-/tests/runnerTests/ignoreTest/reports/*.txt
+**/reports

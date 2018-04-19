@@ -1,5 +1,5 @@
-var assert       = require('double-check').assert;
-var exceptions   = require('double-check').exceptions;
+var assert = require('../').assert;
+var exceptions = require('../').exceptions;
 
 exceptions.register("emptyString", function(explanation){
     if(explanation){
@@ -7,7 +7,7 @@ exceptions.register("emptyString", function(explanation){
     } else {
         throw new Error("EmptyString exception");
     }
-})
+});
 
 assert.addCheck("emptyString", function(str, explanation){
     if(!(str == null || str == undefined || str == '')){
@@ -45,15 +45,15 @@ assert.callback("Expect callback call", function(callback){
 
 
 assert.steps("Expect 3 steps test",
-        [
-            function(nextStep) {
-                asyncFunc(function () {
-                    nextStep();
-                })
-            },
-            asyncFunc,
-            asyncFunc
-        ]);
+    [
+        function(nextStep) {
+            asyncFunc(function () {
+                nextStep();
+            });
+        },
+        asyncFunc,
+        asyncFunc
+    ]);
 
 function fail(){
     assert.emptyString("a non empty string", "Non empty string given to get a failed result");

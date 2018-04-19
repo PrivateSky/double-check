@@ -1,18 +1,17 @@
-var logger       = require('double-check').logger;
-var assert       = require('double-check').assert;
+const logger = require('../').logger;
+const assert = require('../').assert;
 
 var buffer = [];
 
-
 logger.addCase("debug", function(explanation){
     buffer.push(explanation);
-})
+});
 
 logger.addCase("warning", function(explanation){
     buffer.push(explanation);
-})
-logger.alias("warn", "warning");
+});
 
+logger.alias("warn", "warning");
 
 assert.pass("Expect buffer's length to be 3", function(){
     logger.debug("Test debug");
@@ -20,5 +19,5 @@ assert.pass("Expect buffer's length to be 3", function(){
     logger.warn("Test debug");
 
     assert.equal(buffer.length, 3);
-})
+});
 
