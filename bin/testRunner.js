@@ -18,6 +18,6 @@ function callback(error, result) {
 	if(error) {
 		console.error(error);
 	} else {
-		assert.true(fs.existsSync(config.reports.basePath), "Reports dir should be created!");
+        assert.notNull(result, "No result found, please check console!");
 	}
 }
