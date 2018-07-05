@@ -68,6 +68,10 @@
             padding-top: 0;
             padding-bottom: 0;
         }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +121,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table table-sm">
+        <table class="table table-sm" id="resultsTable">
             <thead>
             <tr>
                 <th scope="col">Path</th>
@@ -184,7 +188,7 @@
     function __interpolation(source, tags) {
         const regex = /({{)(\w+)(}})/gim;
 
-        function replacer(match, braces1, word, braces2, offset, string) {
+        function replacer(match, braces1, word) {
             let result = '';
             if (tags && tags[word]) {
                 result = tags[word];
@@ -208,10 +212,6 @@
         renderTestsTable(status);
     }
 
-    function clearTestsTable() {
-        __element('resultsTableBody').innerHTML = '';
-    }
-
     /**
      * Sets data from testRunner.js to window and starts rendering the page
      * @param testsResults
@@ -230,50 +230,88 @@
         __element('totalTestsSucceeded').innerText = window.testsResults.passed.count;
         __element('totalTestsFailed').innerText = window.testsResults.failed.count;
         const successProgressBar = __element('testsSuccessRate');
-        successProgressBar.innerText = 100 * window.testsResults.passed.count / window.testsResults.count;
-        successProgressBar.style.width = successProgressBar.innerText + '%';
+        successProgressBar.innerText = Math.round(100 * window.testsResults.passed.count / window.testsResults.count) + '%';
+        successProgressBar.style.width = successProgressBar.innerText;
 
         renderTestsTable(STATUS.ALL);
     }
 
     function renderTestsTable(status) {
-        clearTestsTable();
+        const tableElements = __element('resultsTable');
         if (status === STATUS.ALL) {
-            renderTestsTableByStatus(STATUS.FAILED);
-            renderTestsTableByStatus(STATUS.PASSED);
-        } else {
-            renderTestsTableByStatus(status);
+            // if table was previously rendered
+            if (tableElements.rows.length > 1) {
+                const tableElements = __element('resultsTable');
+                Array.from(tableElements.rows).forEach(tableElement => {
+                    if (tableElement.classList.contains('table-success')) {
+                        tableElement.classList.remove('hidden');
+                    } else if (tableElement.classList.contains('table-danger')) {
+                        tableElement.classList.remove('hidden');
+                    } else {
+                        tableElement.classList.remove('show');
+                    }
+                });
+            } else {
+                // first run
+                renderTestsTableByStatus(STATUS.FAILED);
+                renderTestsTableByStatus(STATUS.PASSED);
+            }
+        } else if (status === STATUS.FAILED) {
+            Array.from(tableElements.rows).forEach(tableElement => {
+                if (tableElement.classList.contains('table-success')) {
+                    tableElement.classList.add('hidden');
+                } else if (tableElement.classList.contains('table-danger')) {
+                    tableElement.classList.remove('hidden');
+                } else {
+                    tableElement.classList.remove('show');
+                }
+            });
+        } else if (status === STATUS.PASSED) {
+            Array.from(tableElements.rows).forEach(tableElement => {
+                if (tableElement.classList.contains('table-success')) {
+                    tableElement.classList.remove('hidden');
+                } else if (tableElement.classList.contains('table-danger')) {
+                    tableElement.classList.add('hidden');
+                } else {
+                    tableElement.classList.remove('show');
+                }
+            });
         }
     }
 
     function renderTestsTableByStatus(status) {
         const table = __element('resultsTableBody');
 
-        window.testsResults[status].items.forEach((failedTest, index) => {
-            failedTest.index = index.toString();
+        let tableHtml = '';
+
+        window.testsResults[status].items.forEach((test, index) => {
+            test.index = index.toString();
 
             // prepare template for each run
-            failedTest.runsResults = '';
+            test.runsResults = '';
 
-            if (failedTest.reason) {
-                failedTest.reason.forEach(failedReason => {
+            if (test.reason) {
+                test.reason.forEach(failedTestReason => {
                     const container = document.createElement('div');
                     container.innerHTML = runTemplate();
                     const containerContent = container.getElementsByTagName('div')[0];
-                    containerContent.innerHTML = `<h6><b>Run ${failedReason.run} </b></h6>`;
+                    containerContent.innerHTML = `<h6><b>Run ${failedTestReason.run} </b></h6>`;
 
-                    Object.keys(failedReason.log).forEach(log => {
+                    Object.keys(failedTestReason.log).forEach(log => {
                         const logElement = document.createElement('p');
-                        logElement.innerHTML = `${log.capitalize()}: ${prepareLog(log, failedReason.log[log])}`;
+                        logElement.innerHTML = `${log.capitalize()}: ${prepareLog(log, failedTestReason.log[log])}`;
                         containerContent.appendChild(logElement);
                     });
 
-                    failedTest.runsResults += container.innerHTML;
+                    test.runsResults += container.innerHTML;
                 });
             }
 
-            table.innerHTML += __interpolation(getTemplateByStatus(status), failedTest);
+            tableHtml += __interpolation(getTemplateByStatus(status), test);
+
         });
+
+        table.innerHTML += tableHtml;
     }
 
     /**
