@@ -12,6 +12,16 @@
             border-top: none;
         }
 
+
+        /*th:first-child, td:first-child {*/
+            /*padding-left: 15px;*/
+        /*}*/
+
+        td:nth-child(3) {
+            display: flex;
+            flex-direction: column;
+        }
+
         .testsTableHeader {
             display: flex;
             justify-content: space-between;
@@ -71,6 +81,18 @@
 
         .hidden {
             display: none;
+        }
+
+        .stacktrace-display {
+            display: flex;
+        }
+
+        .stacktrace-display > button {
+            align-self: baseline;
+        }
+
+        .stacktrace-display__text > p {
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -295,12 +317,32 @@
                     const container = document.createElement('div');
                     container.innerHTML = runTemplate();
                     const containerContent = container.getElementsByTagName('div')[0];
-                    containerContent.innerHTML = `<h6><b>Run ${failedTestReason.run} </b></h6>`;
+                    containerContent.innerHTML = `<h6><b>Run ${failedTestReason.run}</b></h6>`;
 
-                    Object.keys(failedTestReason.log).forEach(log => {
-                        const logElement = document.createElement('p');
-                        logElement.innerHTML = `${log.capitalize()}: ${prepareLog(log, failedTestReason.log[log])}`;
-                        containerContent.appendChild(logElement);
+                    Object.keys(failedTestReason.log).forEach(logKey => {
+                        const logElement = document.createElement('div');
+
+                        containerContent.appendChild(prepareLog(logKey, failedTestReason.log[logKey]));
+
+                        // if (log === 'stack') {
+                        // let html = document.createElement('div');
+                        // html.classList.add('stacktrace-display');
+                        // html.innerHTML = `
+                        //     <div class="stacktrace-display__text">
+                        //         <p>${log.capitalize()}: ${prepareLog(log, failedTestReason.log[log])}</p>
+                        //     </div>
+                        //     <button class="btn btn-primary btn-rounded btn-sm my-0 active"
+                        //             data-toggle="button"
+                        //             aria-pressed="true"
+                        //             onclick="toggleDetailedStack(this);">Toggle details</button>
+                        // `;
+                        // toggleDetailedStack(html.querySelector('.active'));
+                        // containerContent.appendChild(html);
+                        // } else {
+                        // logElement.innerHTML = `${logKey.capitalize()}: ${prepareLog(logKey, failedTestReason.log[logKey])}`;
+                        // containerContent.appendChild(logElement);
+                        // }
+
                     });
 
                     test.runsResults += container.innerHTML;
@@ -314,6 +356,23 @@
         table.innerHTML += tableHtml;
     }
 
+    function toggleDetailedStack(el) {
+        if (el.parentElement.classList.contains('hasHiddenElements')) {
+            el.parentElement.classList.remove('hasHiddenElements');
+            Array.from(el.parentElement.children[0].children).forEach(p => {
+                p.classList.remove('hidden');
+            });
+        } else {
+            el.parentElement.classList.add('hasHiddenElements');
+            Array.from(el.parentElement.children[0].children).forEach(p => {
+                if (p.innerText.indexOf('/modules/double-check') !== -1 ||
+                    p.innerText.indexOf('/modules/callflow') !== -1) {
+                    p.classList.add('hidden')
+                }
+            });
+        }
+    }
+
     /**
      * Sanitize and format log details
      * @param key
@@ -321,16 +380,32 @@
      * @returns {*}
      */
     function prepareLog(key, value) {
+        let logElement = document.createElement('div');
         switch (key) {
             case 'timestamp':
-                return new Date(value);
+                logElement.innerHTML = `${key.capitalize()}: ${new Date(value)}`;
+                return logElement;
             case 'exception':
-                return JSON.stringify(value);
-            case 'stack': {
-                return value.replace(/(<)/g, '&lt;').replace(/(?:\r\n|\r|\n)/g, '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-            }
+                logElement.innerHTML = `${key.capitalize()}: ${value.valueOf()}`;
+                return logElement;
+            case 'stack':
+                const stackHtml = value.replace(/(<)/g, '&lt;').replace(/(?:\r\n|\r|\n)/g, '</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+
+                logElement.classList.add('stacktrace-display');
+
+                logElement.innerHTML = `
+                    <div><div>${key.capitalize()}: ${stackHtml}</div></div>
+                    <button class="btn btn-primary btn-rounded btn-sm my-0 active"
+                            data-toggle="button"
+                            aria-pressed="true"
+                            onclick="toggleDetailedStack(this);">Toggle details</button>
+                `;
+
+                toggleDetailedStack(logElement.querySelector('.active'));
+                return logElement;
             default:
-                return value;
+                logElement.innerHTML = `${key.capitalize()}: ${value}`;
+                return logElement;
         }
     }
 
@@ -351,11 +426,10 @@
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
+<!--integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
+<!--crossorigin="anonymous"></script>-->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 </body>
-</html>
