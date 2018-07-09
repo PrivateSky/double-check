@@ -1,3 +1,7 @@
+console.log("TestRunner is looking by default for test and tests folders if you want to bypass this run again with --D argument");
+console.log("process.argv", process.argv);
+//return;
+
 const path = require("path");
 const fs = require("fs");
 const testRunner = require('../../double-check').testRunner;
