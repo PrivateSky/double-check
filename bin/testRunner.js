@@ -4,8 +4,9 @@ console.log("process.argv", process.argv);
 
 const path = require("path");
 const fs = require("fs");
-const testRunner = require('double-check').testRunner;
-const assert = require('../lib/checksCore').assert;
+const core = require('../lib/checksCore');
+const testRunner = core.testRunner;
+const assert = core.assert;
 
 var config = {
 	reports: {
@@ -23,4 +24,5 @@ function callback(error, result) {
 	} else {
         assert.notNull(result, "No result found, please check console!");
 	}
+	process.exit();
 }
