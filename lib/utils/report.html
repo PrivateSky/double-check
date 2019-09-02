@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div id="report">
+        <div id="report-head">
+            <div id="title">Test Runner Report (RTT)</div>
+            <div id="no-suites">
+                <div id="no-suites-icon"></div>
+                <div id="no-suites-label">No. of suits</div>
+                <div id="no-suites-value"></div>
+            </div>
+            <div id="no-tests">
+                <div id="no-tests-icon"></div>
+                <div id="no-tests-label">No. of tests</div>
+                <div id="no-tests-value"><span id="runned"></span><small>/<span id="total"></span></small></div>
+            </div>
+            <div id="duration">
+                <div id="no-duration-icon"></div>
+                <div id="no-duration-label">Duration</div>
+                <div id="no-duration-value"></div>
+            </div>
+            <div id="fails">
+                <div id="no-fails-icon"></div>
+                <div id="no-fails-label">Failed</div>
+                <div id="no-fails-value"></div>
+            </div>
+            <div id="successes">
+                <div id="no-successes-icon"></div>
+                <div id="no-successes-label">Success</div>
+                <div id="no-successes-value"></div>
+            </div>
+        </div>
+        <div id="report-main-content">
+            <table id="failed-tests">
+                <thead></thead>
+                <tbody id="failed-tests-table-body"></tbody>
+            </table>
+            <table id="passed-tests">
+                <thead></thead>
+                <tbody id="passed-tests-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
+<script>
+    function print(dataSource){
+        $("#no-suites-value").text(dataSource.passed.length);
+        console.log(dataSource);
+        populateReportHeader(dataSource);
+        buildReportMainContent(dataSource);
+    }
+
+    function populateReportHeader(dataSource){
+        $("#no-suites-value").text(dataSource.suites.length);
+        $("#total").text(dataSource.count);
+        $("#runned").text(dataSource.runned);
+        $("#no-fails-value").text(dataSource.failed.length);
+        $("#no-successes-value").text(dataSource.passed.length);
+        let duration = dataSource.endDate-dataSource.startDate;
+        duration = duration/1000;
+        $("#no-duration-value").text(`${duration} sec`);
+    }
+
+    function displayTests(dataSource, resultType){
+        let target = $(`#${resultType}-tests-table-body`);
+
+        if(dataSource[resultType].length===0){
+            //if no tests are found matching resultType them hide the entire area (table)
+            $(`#${resultType}-tests`).css("display", "none");
+            return;
+        }
+
+        for(let i=0; i<dataSource[resultType].length; i++){
+            let test = dataSource[resultType][i];
+            target.append(`<tr><td>${test.data.name}</td></tr>`);
+        }
+    }
+
+    function buildReportMainContent(dataSource){
+        displayTests(dataSource, "failed");
+        displayTests(dataSource, "passed");
+    }
+</script>
+</html>

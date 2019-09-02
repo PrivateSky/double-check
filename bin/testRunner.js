@@ -4,25 +4,21 @@ console.log("process.argv", process.argv);
 
 const path = require("path");
 const fs = require("fs");
-const core = require('../lib/checksCore');
+const core = {};
+require('../lib/runner').init(core);
 const testRunner = core.testRunner;
-const assert = core.assert;
 
-var config = {
-	reports: {
-		testsDir: path.join(process.cwd()),
-		prefix: "Report-",
-		ext: ".txt"
-	}
-};
-console.log(config);
-testRunner.start(config, callback);
+testRunner.start(null, callback);
 
 function callback(error, result) {
 	if(error) {
 		console.error(error);
 	} else {
-        assert.notNull(result, "No result found, please check console!");
+		if(!result){
+			console.log("Report and results are above, please check console!");
+		}else{
+			console.log("Finished!");
+		}
+		process.exit(0);
 	}
-	process.exit();
 }
