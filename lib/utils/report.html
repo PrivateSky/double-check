@@ -80,6 +80,10 @@
         div#no-successes-label span{
             border-color: forestgreen;
         }
+
+        h1{
+            font-size: 32px;
+        }
         /*------ tables -------*/
         table{
             width: 100%;
@@ -103,8 +107,28 @@
         table .fa-times{
             color: lightcoral;
         }
+
+        table td{
+            text-align: center;
+        }
+
+        table td:nth-child(2){
+            text-align: left;
+        }
+
+        p.counter{
+            font-size: 20px;
+            line-height: 40px;
+        }
+
+        table a:not([href]){
+            color: #007bff!important;
+            cursor: pointer;
+        }
+
         /*------ failed tables -------*/
         table#failed-tests tbody tr{
+
         }
         .collapsed{
             display: none;
@@ -130,8 +154,63 @@
         }
 
         #popup-title{
-            line-height: 40px;
+            line-height: 60px;
             background-color: lightgray;
+            font-size: 24px;
+        }
+
+        #popup .row {
+            padding: 5px 20px;
+        }
+
+        #popup h1{
+            font-size: 30px;
+        }
+
+        #popup-content .container:not(:last-child){
+            border-bottom: black solid 1px;
+            margin-bottom: 40px;
+        }
+
+        /*------ RESPONSIVE ------*/
+        @media only screen and (max-width: 1024px){
+            div[id$="-value"]{
+                font-size: 20px;
+                top: -10px;
+            }
+
+            .label span{
+                font-size: 12px;
+            }
+
+            h1{
+                font-size: 28px;
+            }
+
+            div.panel{
+                min-height: 100px;
+            }
+
+            div[id$="-icon"]{
+                min-height: 50px;
+                padding-top: 10px;
+            }
+
+            div[id$="-icon"] .fa{
+                font-size: 25px;
+            }
+
+            table a{
+                font-size: 12px;
+            }
+
+            table td{
+                font-size: 12px;
+            }
+
+            p.counter{
+                font-size: 16px;
+            }
         }
 
     </style>
@@ -149,7 +228,7 @@
                 </div>
                 <div id="no-tests" class="panel col">
                     <div id="no-tests-icon"><span class="fa fa-bolt"></span></div>
-                    <div id="no-tests-label" class="label"><span>Runned tests / Total</span></div>
+                    <div id="no-tests-label" class="label"><span>Runned / Total</span></div>
                     <div id="no-tests-value"><span id="runned"></span><small>/<span id="total"></span></small></div>
                 </div>
                 <div id="duration" class="panel col">
@@ -171,37 +250,48 @@
         </div>
 
     </div>
-    <div id="report-main-content" class="container">
-        <div class="row">
-            <table id="failed-tests">
-                <thead>
-                <td>
-                    <span class="fa fa-chevron-up" onclick="collapse('#failed-tests-table-body');"></span>
-                </td>
-                <td width="45%">Name</td>
-                <td width="20%">No. of asserts</td>
-                <td width="20%">No. of messages</td>
-                <td width="10%">State</td>
-                <td width="2%"></td>
-                </thead>
-                <tbody id="failed-tests-table-body"></tbody>
-            </table>
+    <div id="report-main-content">
+        <div class="container" id="failed-tests">
+            <div class="row">
+                <h1>Failed Tests</h1>
+            </div>
+            <div class="row">
+                <table>
+                    <thead>
+                    <td>
+                        <span class="fa fa-chevron-up" onclick="collapse('#failed-tests-table-body', event);"></span>
+                    </td>
+                    <td width="55%">Name</td>
+                    <td width="15%">No. of asserts</td>
+                    <td width="15%">No. of messages</td>
+                    <td width="10%">State</td>
+                    <td width="2%"></td>
+                    </thead>
+                    <tbody id="failed-tests-table-body"></tbody>
+                </table>
+            </div>
         </div>
-        <div class="row">
-            <table id="passed-tests">
-                <thead>
-                <td>
-                    <span class="fa fa-chevron-up" onclick="collapse('#passed-tests-table-body');"></span>
-                </td>
-                <td width="45%">Name</td>
-                <td width="20%">No. of asserts</td>
-                <td width="20%">No. of messages</td>
-                <td width="10%">State</td>
-                <td></td>
-                </thead>
-                <tbody id="passed-tests-table-body"></tbody>
-            </table>
+        <div id="passed-tests" class="container">
+            <div class="row">
+                <h1>Passed Tests</h1>
+            </div>
+            <div class="row">
+                <table>
+                    <thead>
+                    <td>
+                        <span class="fa fa-chevron-up" onclick="collapse('#passed-tests-table-body', event);"></span>
+                    </td>
+                    <td width="55%">Name</td>
+                    <td width="15%">No. of asserts</td>
+                    <td width="15%">No. of messages</td>
+                    <td width="10%">State</td>
+                    <td width="2%"></td>
+                    </thead>
+                    <tbody id="passed-tests-table-body"></tbody>
+                </table>
+            </div>
         </div>
+
     </div>
 </div>
 <div id="popup" class="test-details" onclick="closeTestDetails(event)">
@@ -229,32 +319,39 @@
         $("#total").text(dataSource.count);
         $("#runned").text(dataSource.runned);
         $("#no-fails-value").text(dataSource.failed.length);
-        $("#no-successes-value").text(`${(dataSource.passed.length/dataSource.count)*100}%`);
+        let rate = ((dataSource.passed.length/dataSource.count)*100).toPrecision(4);
+        $("#no-successes-value").text(`${rate}%`);
         let duration = dataSource.endDate-dataSource.startDate;
         duration = duration/1000;
         $("#no-duration-value").text(`${duration} sec`);
     }
 
     function displayTests(dataSource, resultType){
-        let target = $(`#${resultType}-tests-table-body`);
-
         if(dataSource[resultType].length===0){
             //if no tests are found matching resultType them hide the entire area (table)
             $(`#${resultType}-tests`).css("display", "none");
             return;
         }
 
+        let target = $(`#${resultType}-tests-table-body`);
+
+        $(`#${resultType}-tests h1`).parent().append(`<p class="counter"> (${dataSource[resultType].length})</p>`);
+        const limita = 50;
         for(let i=0; i<dataSource[resultType].length; i++){
             let test = dataSource[resultType][i];
             let detailsPairTable = `#passed-tests-${i}`;
+            let testFileName = test.data.path;
+            if(test.data.path.length>limita*1.5){
+                testFileName = "..."+test.data.path.substr(test.data.path.length - limita);
+            }
             target.append(
                 `<tr>
                     <td><span class="fa ${test.result.pass ? 'fa-check' : 'fa-times'}"/></td>
-                    <td><a href="${test.data.path}">${test.data.name}</a></td>
+                    <td><a onclick="displayTestDetails('${resultType}', '${i}');">${testFileName}</a></td>
                     <td>${test.result.asserts.length}</td>
                     <td>${test.result.messages.length}</td>
                     <td>${test.result.state}</td>
-                    <td><span onclick="displayTestDetails('${resultType}', '${i}');" class="fa fa-file"></span></td>
+                    <td><a href="${test.data.path}"><span class="fa fa-file"></span></a></td>
                 </tr>`);
         }
     }
@@ -264,18 +361,44 @@
         displayTests(dataSource, "passed");
     }
 
-    function collapse(target){
+    function collapse(target, event){
         $(target).toggleClass("collapsed");
+        $(event.target).toggleClass("fa-chevron-up").toggleClass("fa-chevron-down");
     }
 
     function displayTestDetails(testType, index){
         let popupContainer = $("#popup-content");
         test = window.dataSource[testType][index];
-        for(let i=0; i<test.result.messages.length; i++){
-            let message = JSON.stringify(test.result.messages[i]);
-            popupContainer.append(`<p>${message}</p>`);
+
+        let pop_asserts = "";
+        for(let i=0; i<test.result.asserts.length; i++){
+            let message = test.result.asserts[i];
+            if(typeof message !== "string"){
+                message = JSON.stringify(message);
+            }
+            message = message.replace("\n", "<br>");
+            pop_asserts+=`<p>${message}</p>`;
         }
-        $("#popup-title").html(`Test ${test.data.name} details`);
+
+        if(pop_asserts.length == 0){
+            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row'>No asserts tested.</div></div>`);
+        }else{
+            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row'>${pop_asserts}</div></div>`);
+        }
+
+        let pop_console = "";
+        for(let i=0; i<test.result.messages.length; i++){
+            let message = test.result.messages[i];
+            if(typeof message !== "string"){
+                message = JSON.stringify(message);
+            }
+            message = message.replace("\n", "<br>");
+            pop_console+=`<p>${message}</p>`;
+        }
+
+        popupContainer.append(`<div class='container'><div class='row'><h3>Console messages</h3></div><div class='row'>${pop_console}</div></div>`);
+
+        $("#popup-title").html(`<h1>Test ${test.data.name} details</h1>`);
         $("#popup").css("display", "block");
     }
 
