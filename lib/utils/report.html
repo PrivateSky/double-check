@@ -376,10 +376,10 @@
                 message = JSON.stringify(message);
             }
             message = message.replace("\n", "<br>");
-            pop_asserts+=`<p>${message}</p>`;
+            pop_asserts+=`<div>${message}</div>`;
         }
 
-        if(pop_asserts.length == 0){
+        if(pop_asserts.length === 0){
             popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row'>No asserts tested.</div></div>`);
         }else{
             popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row'>${pop_asserts}</div></div>`);
@@ -402,7 +402,7 @@
     }
 
     function closeTestDetails(event){
-        if($(event.target).attr("id") == "popup"){
+        if($(event.target).attr("id") === "popup"){
             $("#popup").css("display", "none");
             $("#popup-content").html("");
         }
