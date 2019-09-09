@@ -1,14 +1,25 @@
-console.log("TestRunner is looking by default for test and tests folders if you want to bypass this run again with --D argument");
-console.log("process.argv", process.argv);
-//return;
+console.log("\n|+++++++++++++++++\n|TestRunner params\n| --directory='path_to_a_test_dir' \n| --config='path_to_a_config_file'\n|+++++++++++++++++\n");
 
 const path = require("path");
 const fs = require("fs");
+
+let config = null;
+let parg = process.processedArgv;
+
+if(parg){
+	if(parg.directory){
+		config = {"testDirs":[path.resolve(parg.directory)]};
+	}
+	if(parg.config){
+		config = require(parg.config);
+	}
+}
+
 const core = {};
 require('../lib/runner').init(core);
 const testRunner = core.testRunner;
 
-testRunner.start(null, callback);
+testRunner.start(config, callback);
 
 function callback(error, result) {
 	if(error) {
