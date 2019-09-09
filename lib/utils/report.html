@@ -218,7 +218,7 @@
 <body>
 <div id="report">
     <div id="report-head">
-        <div id="title">Test Runner Report (RTT)</div>
+        <div id="title">Test Runner Report (TRR)</div>
         <div class="container">
             <div class="row">
                 <div id="no-suites" class="panel col">
@@ -323,7 +323,7 @@
         $("#no-successes-value").text(`${rate}%`);
         let duration = dataSource.endDate-dataSource.startDate;
         duration = duration/1000;
-        $("#no-duration-value").text(`${duration} sec`);
+        $("#no-duration-value").text(`${duration}s`);
     }
 
     function displayTests(dataSource, resultType){
