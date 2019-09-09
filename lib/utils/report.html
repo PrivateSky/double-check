@@ -307,7 +307,6 @@
 </script>
 <script>
     function print(dataSource){
-        $("#no-suites-value").text(dataSource.passed.length);
         console.log(dataSource);
         window.dataSource = dataSource;
         populateReportHeader(dataSource);
