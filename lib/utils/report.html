@@ -373,9 +373,13 @@
         for(let i=0; i<test.result.asserts.length; i++){
             let message = test.result.asserts[i];
             if(typeof message !== "string"){
-                message = JSON.stringify(message);
+                if(typeof message === "object" && !Array.isArray(message) && typeof message.message !== "undefined"){
+                    message = message.message;
+                }else{
+                    message = JSON.stringify(message);
+                }
             }
-            message = message.replace("\n", "<br>");
+            message = message.replace(new RegExp("\n", 'g'), "<br>");
             pop_asserts+=`<div>${message}</div>`;
         }
 
@@ -391,8 +395,8 @@
             if(typeof message !== "string"){
                 message = JSON.stringify(message);
             }
-            message = message.replace("\n", "<br>");
-            pop_console+=`<p>${message}</p>`;
+            message = message.replace(new RegExp("\n", 'g'), "<br>");
+            pop_console+=`<div style="display: block;width: 100%;font-family: monospace;font-size: 16px;">${message}</div>`;
         }
 
         popupContainer.append(`<div class='container'><div class='row'><h3>Console messages</h3></div><div class='row'>${pop_console}</div></div>`);
