@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        body{
+            background-color: #F8F8F8;
+        }
+        div#title{
+            background-color: white;
+            border-bottom: #DDD 2px solid;
+            text-align: center;
+            line-height: 75px;
+            font-family: sans-serif;
+            font-size: 24px;
+            color: #666;
+        }
+        #report-head .container{
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+        div.panel{
+            border: #DDD 1px solid;
+            background-color: white;
+            min-height: 200px;
+        }
+        div.panel.col{
+            padding: 0;
+            margin: 0 5px;
+        }
+        div.label{
+            text-align: center;
+            position: relative;
+            top: -12px;
+        }
+        .label span{
+            text-transform: uppercase;
+            border-radius: 15px;
+            padding: 2px 10px;
+            border: #ddd 1px solid;
+            background-color: white;
+        }
+        div[id$="-value"]{
+            font-family: sans-serif;
+            font-size: 32px;
+            color: #666;
+            text-align: center;
+            top: 6px;
+            position: relative;
+        }
+        div[id$="-icon"]{
+            min-height: 100px;
+            background-color: #F8F8F8;
+            margin: 0;
+            text-align: center;
+            padding-top: 20px;
+        }
+        div[id$="-icon"] .fa{
+            font-size: 50px;
+        }
+        div#no-fails-icon{
+            background-color: lightcoral;
+            border-color: lightcoral;
+            color: white;
+        }
+        div#no-fails-label span{
+            border-color: lightcoral;
+        }
+        div#no-successes-icon{
+            background-color: forestgreen;
+            border-color: forestgreen;
+            color: white;
+        }
+        div#no-successes-label span{
+            border-color: forestgreen;
+        }
+        /*------ tables -------*/
+        table{
+            width: 100%;
+        }
+        table thead{
+            font-weight: bold;
+        }
+        table td{
+            line-height: 40px;
+        }
+        table thead {
+            background-color: lightsteelblue;
+        }
+        table tr td:first-child{
+            min-width: 15px;
+            text-align: center;
+        }
+        table .fa-check{
+            color: forestgreen;
+        }
+        table .fa-times{
+            color: lightcoral;
+        }
+        /*------ failed tables -------*/
+        table#failed-tests tbody tr{
+        }
+        .collapsed{
+            display: none;
+        }
+        /*------ popup -------*/
+        div#popup {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        #popup .container{
+            position: relative;
+            top: 20%;
+            max-height: 60%;
+            overflow: auto;
+            background-color: white;
+        }
+
+        #popup-title{
+            line-height: 40px;
+            background-color: lightgray;
+        }
+
+    </style>
+</head>
+<body>
+<div id="report">
+    <div id="report-head">
+        <div id="title">Test Runner Report (RTT)</div>
+        <div class="container">
+            <div class="row">
+                <div id="no-suites" class="panel col">
+                    <div id="no-suites-icon"><span class="fa fa-folder-open-o"></span></div>
+                    <div id="no-suites-label" class="label"><span>Suits</span></div>
+                    <div id="no-suites-value"></div>
+                </div>
+                <div id="no-tests" class="panel col">
+                    <div id="no-tests-icon"><span class="fa fa-bolt"></span></div>
+                    <div id="no-tests-label" class="label"><span>Runned tests / Total</span></div>
+                    <div id="no-tests-value"><span id="runned"></span><small>/<span id="total"></span></small></div>
+                </div>
+                <div id="duration" class="panel col">
+                    <div id="no-duration-icon"><span class="fa fa-clock-o"></span></div>
+                    <div id="no-duration-label" class="label"><span>Duration</span></div>
+                    <div id="no-duration-value"></div>
+                </div>
+                <div id="fails" class="panel col">
+                    <div id="no-fails-icon"><span class="fa fa-times"></span></div>
+                    <div id="no-fails-label" class="label"><span>Failed</span></div>
+                    <div id="no-fails-value"></div>
+                </div>
+                <div id="successes" class="panel col">
+                    <div id="no-successes-icon"><span class="fa fa-check"></span></div>
+                    <div id="no-successes-label" class="label"><span>Success Rate</span></div>
+                    <div id="no-successes-value"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="report-main-content" class="container">
+        <div class="row">
+            <table id="failed-tests">
+                <thead>
+                <td>
+                    <span class="fa fa-chevron-up" onclick="collapse('#failed-tests-table-body');"></span>
+                </td>
+                <td width="45%">Name</td>
+                <td width="20%">No. of asserts</td>
+                <td width="20%">No. of messages</td>
+                <td width="10%">State</td>
+                <td width="2%"></td>
+                </thead>
+                <tbody id="failed-tests-table-body"></tbody>
+            </table>
+        </div>
+        <div class="row">
+            <table id="passed-tests">
+                <thead>
+                <td>
+                    <span class="fa fa-chevron-up" onclick="collapse('#passed-tests-table-body');"></span>
+                </td>
+                <td width="45%">Name</td>
+                <td width="20%">No. of asserts</td>
+                <td width="20%">No. of messages</td>
+                <td width="10%">State</td>
+                <td></td>
+                </thead>
+                <tbody id="passed-tests-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="popup" class="test-details" onclick="closeTestDetails(event)">
+    <div class="container">
+        <div id="popup-title" class="row"></div>
+        <div id="popup-content" class="row"></div>
+    </div>
+</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+</script>
+<script>
+    function print(dataSource){
+        $("#no-suites-value").text(dataSource.passed.length);
+        console.log(dataSource);
+        window.dataSource = dataSource;
+        populateReportHeader(dataSource);
+        buildReportMainContent(dataSource);
+    }
+
+    function populateReportHeader(dataSource){
+        $("#no-suites-value").text(dataSource.suites.length);
+        $("#total").text(dataSource.count);
+        $("#runned").text(dataSource.runned);
+        $("#no-fails-value").text(dataSource.failed.length);
+        $("#no-successes-value").text(`${(dataSource.passed.length/dataSource.count)*100}%`);
+        let duration = dataSource.endDate-dataSource.startDate;
+        duration = duration/1000;
+        $("#no-duration-value").text(`${duration} sec`);
+    }
+
+    function displayTests(dataSource, resultType){
+        let target = $(`#${resultType}-tests-table-body`);
+
+        if(dataSource[resultType].length===0){
+            //if no tests are found matching resultType them hide the entire area (table)
+            $(`#${resultType}-tests`).css("display", "none");
+            return;
+        }
+
+        for(let i=0; i<dataSource[resultType].length; i++){
+            let test = dataSource[resultType][i];
+            let detailsPairTable = `#passed-tests-${i}`;
+            target.append(
+                `<tr>
+                    <td><span class="fa ${test.result.pass ? 'fa-check' : 'fa-times'}"/></td>
+                    <td><a href="${test.data.path}">${test.data.name}</a></td>
+                    <td>${test.result.asserts.length}</td>
+                    <td>${test.result.messages.length}</td>
+                    <td>${test.result.state}</td>
+                    <td><span onclick="displayTestDetails('${resultType}', '${i}');" class="fa fa-file"></span></td>
+                </tr>`);
+        }
+    }
+
+    function buildReportMainContent(dataSource){
+        displayTests(dataSource, "failed");
+        displayTests(dataSource, "passed");
+    }
+
+    function collapse(target){
+        $(target).toggleClass("collapsed");
+    }
+
+    function displayTestDetails(testType, index){
+        let popupContainer = $("#popup-content");
+        test = window.dataSource[testType][index];
+        for(let i=0; i<test.result.messages.length; i++){
+            let message = JSON.stringify(test.result.messages[i]);
+            popupContainer.append(`<p>${message}</p>`);
+        }
+        $("#popup-title").html(`Test ${test.data.name} details`);
+        $("#popup").css("display", "block");
+    }
+
+    function closeTestDetails(event){
+        if($(event.target).attr("id") == "popup"){
+            $("#popup").css("display", "none");
+            $("#popup-content").html("");
+        }
+    }
+</script>
+<script>
+print({"count":2,"suites":{},"passed":[],"failed":[],"startDate":1567760415814,"endDate":1567760418788,"runned":0});
+</script>
+</html>
