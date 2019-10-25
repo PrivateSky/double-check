@@ -172,6 +172,10 @@
             margin-bottom: 40px;
         }
 
+        .row.asserts {
+            display: block;
+        }
+
         /*------ RESPONSIVE ------*/
         @media only screen and (max-width: 1024px){
             div[id$="-value"]{
@@ -384,9 +388,9 @@
         }
 
         if(pop_asserts.length === 0){
-            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row'>No asserts tested.</div></div>`);
+            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row asserts'>No asserts tested.</div></div>`);
         }else{
-            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row'>${pop_asserts}</div></div>`);
+            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row asserts'>${pop_asserts}</div></div>`);
         }
 
         let pop_console = "";
