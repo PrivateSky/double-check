@@ -1,7 +1,6 @@
 console.log("\n|+++++++++++++++++\n|TestRunner params\n| --directory='path_to_a_test_dir' \n| --config='path_to_a_config_file'\n|+++++++++++++++++\n");
 
 const path = require("path");
-const fs = require("fs");
 
 let config = null;
 let parg = process.processedArgv;
