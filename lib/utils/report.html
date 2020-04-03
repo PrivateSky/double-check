@@ -311,13 +311,14 @@
 </script>
 <script>
     function print(dataSource){
-        console.log(dataSource);
+        //console.log(dataSource);
         window.dataSource = dataSource;
         populateReportHeader(dataSource);
         buildReportMainContent(dataSource);
     }
 
     function populateReportHeader(dataSource){
+        $("#title").html("Test Report <span>[" + new Date(dataSource.endDate).toLocaleString("en-US")+"]</span>");
         $("#no-suites-value").text(dataSource.suites.length);
         $("#total").text(dataSource.count);
         $("#runned").text(dataSource.runned);
