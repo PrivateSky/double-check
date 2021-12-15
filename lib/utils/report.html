@@ -266,7 +266,7 @@
                         <span class="fa fa-chevron-up" onclick="collapse('#failed-tests-table-body', event);"></span>
                     </td>
                     <td width="55%">Name</td>
-                    <td width="15%">No. of asserts</td>
+                    <td width="15%">No. of cases</td>
                     <td width="15%">No. of messages</td>
                     <td width="10%">State</td>
                     <td width="2%"></td>
@@ -286,7 +286,7 @@
                         <span class="fa fa-chevron-up" onclick="collapse('#passed-tests-table-body', event);"></span>
                     </td>
                     <td width="55%">Name</td>
-                    <td width="15%">No. of asserts</td>
+                    <td width="15%">No. of cases</td>
                     <td width="15%">No. of messages</td>
                     <td width="10%">State</td>
                     <td width="2%"></td>
@@ -389,9 +389,9 @@
         }
 
         if(pop_asserts.length === 0){
-            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row asserts'>No asserts tested.</div></div>`);
+            popupContainer.append(`<div class='container'><div class='row'><h3>Test cases</h3></div><div class='row asserts'>No cases tested.</div></div>`);
         }else{
-            popupContainer.append(`<div class='container'><div class='row'><h3>Asserts</h3></div><div class='row asserts'>${pop_asserts}</div></div>`);
+            popupContainer.append(`<div class='container'><div class='row'><h3>Test cases</h3></div><div class='row asserts'>${pop_asserts}</div></div>`);
         }
 
         let pop_console = "";
@@ -408,6 +408,8 @@
 
         $("#popup-title").html(`<h1>Test ${test.data.name} details</h1>`);
         $("#popup").css("display", "block");
+        //always scroll on top
+		document.getElementById("popup-title").parentNode.scrollTop = 0;
     }
 
     function closeTestDetails(event){
