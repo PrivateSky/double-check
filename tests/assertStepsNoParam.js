@@ -3,13 +3,13 @@ const assert = require("double-check").assert;
 
 assert.callback("Step test", function(callback){
 
-	var faillingMessage = "[Fail Timeout] Test with functions that take parameters [at step 1]";
-	var arr = [function a (){}];
+	let failingMessage = "[Fail Timeout] Test with functions that take parameters [at step 1]";
+	let arr = [function a (){}];
 
-	var oldSend = process.send;
+	//let oldSend = process.send;
 	process.send = function(event){
 
-		if(faillingMessage == event.message){
+		if(failingMessage == event.message){
 			callback();
 		}else{
 			console.log(event);

@@ -10,7 +10,7 @@ exceptions.register("emptyString", function(explanation){
 });
 
 assert.addCheck("emptyString", function(str, explanation){
-    if(!(str == null || str == undefined || str == '')){
+    if(!(str === null || typeof str === "undefined" || str == '')){
         exceptions.emptyString(explanation);
     }
 })
