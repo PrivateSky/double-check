@@ -1,5 +1,5 @@
-require("../../../psknode/bundles/pskruntime"); 
-const assert = require("double-check").assert;
+
+const assert = require("../../lib/checksCore").assert;
 
 var arr = [function a (next){
                 next();

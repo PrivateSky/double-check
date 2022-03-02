@@ -1,5 +1,5 @@
-var assert = require('../').assert;
-var exceptions = require('../').exceptions;
+var assert = require('../../lib/checksCore').assert;
+var exceptions = require('../../lib/checksCore').exceptions;
 
 exceptions.register("emptyString", function(explanation){
     if(explanation){

@@ -1,5 +1,5 @@
-const logger = require('../').logger;
-const assert = require('../').assert;
+const logger = require('../../lib/checksCore').logger;
+const assert = require('../../lib/checksCore').assert;
 
 var buffer = [];
 

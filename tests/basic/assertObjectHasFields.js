@@ -1,11 +1,8 @@
-require("../../../psknode/bundles/pskruntime");
-const assert = require("double-check").assert;
+const assert = require("../../lib/checksCore").assert;
+
 var f = $$.flow.describe("assertObjectHasFields",{
     action:function(cb){
-        var locationArray = [1, 2, 3];
-        var name = "john";
-        var age = 4;
-        this.testData = [{location: locationArray}, {location: locationArray}, {name: name}, {name: name}, {age: age, city:"iasi"}, {age: age}];
+        this.testData = [{}, {}, {age: 23}, {age:23}, {age:24, name:"adrian"}, {age:24}];
         this.cb = cb;
         for (var i = 0; i < this.testData.length; i++) {
             assert.objectHasFields(this.testData[i], this.testData[i+1]);

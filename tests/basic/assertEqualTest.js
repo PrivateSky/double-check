@@ -1,5 +1,3 @@
-require("../../../psknode/bundles/pskruntime"); 
-const assert = require("double-check").assert;
 var f = $$.flow.describe("equalPrimitiveAndNonPrimPositiveTest",{
 
     action:function(cb){
