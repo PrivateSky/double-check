@@ -5,7 +5,7 @@ let TIMEOUT = 3000;
 
 let cfg= {
         timeOut: TIMEOUT,
-        minRatePerSecond:100,
+        parallelCalls:100,
         testFunction: function (end){
             end();
         }
